@@ -1,0 +1,22 @@
+useDynLib(esaddle)
+exportPattern("^[[:alpha:]]+")
+
+# Imported stuff
+importFrom(compiler, "cmpfun")
+
+importFrom(mvnfast, "rmvn", "dmvn", "maha")
+
+importFrom(plyr, "alply", "laply", "aaply", "llply", "rlply")
+
+importFrom(doSNOW, "registerDoSNOW")
+
+importFrom(Rcpp)
+
+importFrom(parallel, "clusterApply")
+importFrom(parallel, "clusterEvalQ")
+importFrom(parallel, "clusterExport")
+importFrom(parallel, "makeCluster")
+importFrom(parallel, "stopCluster")
+importFrom(parallel, "detectCores")
+
+importFrom(graphics, "plot")
