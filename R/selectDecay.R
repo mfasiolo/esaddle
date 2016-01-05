@@ -125,7 +125,7 @@ selectDecay <- function(decay,
   
   # (Optionally) Plot the score for each value in "decay".
   if(draw){
-    par(mfrow = c(2, 1))
+    if( normalize ) par(mfrow = c(2, 1))
     
     n <- length(decay)
     matplot(y = out$negLogLik, type = 'l', xaxt = "n", xlab = "Decay", ylab = "- Log-likelihood" )

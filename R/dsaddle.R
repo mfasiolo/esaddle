@@ -105,7 +105,7 @@ dsaddle <- function(y, X,  decay = 0.5, deriv = FALSE, log = FALSE,
     objFun <- function(.y, .lambda)
     {
       return( .dsaddle(y = .y, X = X, tol = ctrl$tol, decay = decayI, 
-                        deriv = deriv, log = log, lambda = .lambda) )
+                        deriv = deriv, lambda = .lambda) )
     }
     
     # Gradient function
@@ -129,8 +129,7 @@ dsaddle <- function(y, X,  decay = 0.5, deriv = FALSE, log = FALSE,
                    X = X,
                    tol = ctrl$tol,
                    decay = decayI,
-                   deriv = deriv,
-                   log = log)}, warning = function(w) {
+                   deriv = deriv)}, warning = function(w) {
                      # There is a bug in plyr concerning a useless warning about "..."
                      if (length(grep("... may be used in an incorrect context", conditionMessage(w))))
                        invokeRestart("muffleWarning")
@@ -182,6 +181,8 @@ dsaddle <- function(y, X,  decay = 0.5, deriv = FALSE, log = FALSE,
   out$llk <- out$llk + sum(log(abs(diag(iCov$E))))
   if( deriv ) out$grad <- drop( drop(out$grad) %*% iCov$E )
   
+  if( !log ) out$llk <- exp( out$llk )
+  
   return( out )
   
 }
@@ -195,7 +196,7 @@ dsaddle <- function(y, X,  decay = 0.5, deriv = FALSE, log = FALSE,
 
 .dsaddle <- cmpfun(function(y, X, tol, decay, 
                              deriv = FALSE, mixMethod = "mse", 
-                             maxit = 100, log = FALSE, lambda = NULL) {
+                             maxit = 100, lambda = NULL) {
   ## X[i,j] is ith rep of jth variable; y is vector of variables.
   ## evaluate saddle point approximation based on empirical CGF
   
@@ -282,7 +283,6 @@ dsaddle <- function(y, X,  decay = 0.5, deriv = FALSE, log = FALSE,
   logDet <- sum(log(abs(diag(qr.R(d2KQR))))) - 2 * sum(log(dd))
   
   spa <- b$K - crossprod(lambda, y) - 0.5 * log( 2*pi ) * d - 0.5 * logDet
-  if( !log ) spa <- exp(spa)
   
   # Additional stuff needed by .gradSaddle()
   b[ c("dd", "DD", "d2KQR") ] <- list(dd, DD, d2KQR)
