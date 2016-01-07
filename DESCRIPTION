@@ -19,5 +19,4 @@ Imports:
 Suggests:
     testthat
 LinkingTo: Rcpp, RcppArmadillo, RcppMLPACK, BH
-VignetteBuilder: knitr
 RoxygenNote: 5.0.1
