@@ -11,21 +11,30 @@ selectDecay(decay, simulator, K, nrep = 1, normalize = FALSE, draw = TRUE,
 \arguments{
 \item{decay}{Numeric vector containing the possible value of the tuning parameter.}
 
+\item{simulator}{Function with prototype \code{function(...)} that will be called \code{nrep} times
+to simulate \code{d}-dimensional random variables. 
+Each time \code{simulator} is called it will return a \code{n} by \code{d} matrix.}
+
+\item{K}{The number of folds to be used in cross-validation. By default \code{K = 10}.}
+
 \item{nrep}{Number of times the whole cross-validation procedure will be repeated, by calling
 \code{simulator} to generate random variable and computing the cross-validation score
 for every element of \code{decay}.}
 
-\item{multicore}{see \code{\link{smcmc-class}}.}
+\item{normalize}{is TRUE the normalizing constant of ESA is normalized at each value of \code{decay}.
+FALSE by default.}
+
+\item{draw}{ff \code{TRUE} the results of cross-validation will be plotted. \code{TRUE} by default.}
+
+\item{multicore}{if TRUE each fold will be run on a different core.}
 
 \item{cluster}{an object of class \code{c("SOCKcluster", "cluster")}. This allowes the user to pass her own cluster,
 which will be used if \code{multicore == TRUE}. The user has to remember to stop the cluster.}
 
-\item{ncores}{see \code{\link{smcmc-class}}.}
+\item{ncores}{number of cores to be used.}
 
 \item{control}{A list of control parameters, with entries:
 \itemize{
-\item{ \code{K} }{The number of folds to be used in cross-validation. By defaults \code{K = 10};}
-\item{ \code{draw} }{ If \code{TRUE} the results of cross-validation will be plotted. \code{TRUE} by default;}
 \item{ \code{method} }{The method used to calculate the normalizing constant. 
                        Either "LAP" (laplace) or "IS" (importance sampling).}
 \item{ \code{tol} }{The tolerance used to assess the convergence of the solution to the saddlepoint equation.
@@ -33,10 +42,6 @@ which will be used if \code{multicore == TRUE}. The user has to remember to stop
 \item{ \code{nNorm} }{ Number of simulations to be used in order to estimate the normalizing constant of the saddlepoint density.
                        By default equal to 1e3.}
 }}
-
-\item{simulate}{Function with prototype \code{function(...)} that will be called \code{nrep} times
-to simulate \code{d}-dimensional random variables. 
-Each time \code{simulator} is called it will return a \code{n} by \code{d} matrix.}
 }
 \value{
 A list with entries:

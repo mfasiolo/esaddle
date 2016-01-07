@@ -1,4 +1,20 @@
-
+#####
+#' Empirical multivariate Gaussian density 
+#' @description Gives a pointwise evaluation of the multivariate normal (MVN) fit to X at position y.
+#'
+#' @param y points at which the MVN is evaluated (d dimensional vector) or an n by d matrix, each row indicating
+#'          a different position.
+#' @param X n by d matrix containing the data.
+#' @param log If TRUE the log of the log-density is returned.
+#' @param verbose currently not used.
+#' @return The density of the empirical MVN, evaluated at y.
+#' @author Matteo Fasiolo <matteo.fasiolo@@gmail.com> and Simon Wood.
+#' @examples 
+#' X <- matrix(rnorm(2 * 1e3), 1e3, 2)
+#' demvn(rnorm(2), X, log = TRUE)
+#' @export demvn
+#'
+#'
 demvn <- function(y, X, log = FALSE, verbose = TRUE)
 {
   

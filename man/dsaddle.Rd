@@ -47,6 +47,6 @@ Gives a pointwise evaluation of the empirical saddlepoint and optionally of
              its gradient at position y
 }
 \author{
-Matteo Fasiolo <matteo.fasiolo@gmail.com> and Simon Wood.
+Matteo Fasiolo <matteo.fasiolo@gmail.com> and Simon N. Wood.
 }
 

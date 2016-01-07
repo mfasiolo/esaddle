@@ -1,7 +1,7 @@
 # Calculates the laplace approximation given the value (f) of a function at its
 # maximum and the Hessian (H)
 
-laplApprox <- function(f, H, log = FALSE)
+.laplApprox <- function(f, H, log = FALSE)
 {
   
   d <- ncol(H)

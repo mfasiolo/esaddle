@@ -4,31 +4,18 @@
 #'
 #' @param lambda Point at which the CGF is evaluated (d-dimensional vector).
 #' @param X (n by d) matrix containing the data.
-#' @param kum1 Mean vector of the data.
-#' @param kum2 Covariance matrix of the data.
-#' @param grad If grad == 0 only the value of the CGF is returned, 
-#'             if grad == 1 also its first derivative wrt lambda 
-#'             and if grad == 2 also the second derivarive wrt lambda.
 #' @param deriv If TRUE the gradient of the empitical CGF wrt y (and at y) is returned.
 #'              Otherwise the values of the empirical CGF (and possibly of its derivatives wrt
 #'              lambda) at lambda is returned.
-#' @param mix Mixture of empirical and normal CGF to use (if 1 only empirical CGF is used).
+#' @param onlyDlamDy if TRUE only dLambda/dY is computed.
 #' @param addList = list of additional (optional) arguments: 
 #'         \itemize{
 #'         \item{ \code{invCOV} }{The inverse of kum2;}
 #'         \item{ \code{y} }{The point at which the underlying empirical saddlepoint is evaluated;}
 #'         \item{ \code{grad} }{The decay rate of the saddlepoint. See ?dsaddle for details;}
 #'         }
-#' @return If deriv == FALSE a list with entries:
-#'         \itemize{
-#'         \item{ \code{K} }{The value of the empirical CGF at lambda;}
-#'         \item{ \code{dK} }{The value of the gradient empirical CGF wrt lambda at lambda;}
-#'         \item{ \code{d2K} }{The value of the hessian of the empirical CGF wrt lambda at lambda;}
-#'         }
-#'         If deriv == TRUE the gradient of the empitical CGF wrt y (and at y) is returned. 
-#'         This is used to calculate the gradient of the underlying empirical saddlepoint density
-#'         at y. 
-#' @author Matteo Fasiolo <matteo.fasiolo@@gmail.com> and Simon Wood.
+#' @return The gradient of the saddlepoint. 
+#' @author Matteo Fasiolo <matteo.fasiolo@@gmail.com>.
 #'
 
 .gradSaddle <- cmpfun( function(y, lambda, X, decay, extra, onlyDlamDy = FALSE, mixMethod = "mse") {

@@ -26,7 +26,7 @@
 #'         \item{ \code{mix} }{The mixture of normal-saddlepoint used (1 means only saddlepoint);}
 #'         \item{ \code{grad} }{The gradient of the log-density at y (optional);}
 #'         }
-#' @author Matteo Fasiolo <matteo.fasiolo@@gmail.com> and Simon Wood.
+#' @author Matteo Fasiolo <matteo.fasiolo@@gmail.com> and Simon N. Wood.
 #' @export
 #'
 
@@ -169,7 +169,7 @@ dsaddle <- function(y, X,  decay = 0.5, deriv = FALSE, log = FALSE,
     if(ctrl$method == "LAP")
     {
       tmp <- findMode(X = iX, init = iCov$mY, decay = decay, sadControl = list("tol" = ctrl$tol), hess = T)
-      logNorm <- laplApprox(tmp$logDens, tmp$hess, log = TRUE)
+      logNorm <- .laplApprox(tmp$logDens, tmp$hess, log = TRUE)
     }
     
     out$logNorm <- logNorm

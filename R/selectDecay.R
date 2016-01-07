@@ -6,20 +6,22 @@
 #'              of the Cumulant Generating Function (ECGF).
 #'
 #' @param decay Numeric vector containing the possible value of the tuning parameter.
-#' @param simulate  Function with prototype \code{function(...)} that will be called \code{nrep} times
+#' @param simulator  Function with prototype \code{function(...)} that will be called \code{nrep} times
 #'                  to simulate \code{d}-dimensional random variables. 
 #'                  Each time \code{simulator} is called it will return a \code{n} by \code{d} matrix.
+#' @param K The number of folds to be used in cross-validation. By default \code{K = 10}.
 #' @param nrep Number of times the whole cross-validation procedure will be repeated, by calling
 #'             \code{simulator} to generate random variable and computing the cross-validation score
 #'             for every element of \code{decay}.
-#' @param multicore  see \code{\link{smcmc-class}}.
-#' @param ncores   see \code{\link{smcmc-class}}.
+#' @param normalize is TRUE the normalizing constant of ESA is normalized at each value of \code{decay}.
+#'                  FALSE by default.
+#' @param draw ff \code{TRUE} the results of cross-validation will be plotted. \code{TRUE} by default.
+#' @param multicore  if TRUE each fold will be run on a different core.
+#' @param ncores   number of cores to be used.
 #' @param cluster an object of class \code{c("SOCKcluster", "cluster")}. This allowes the user to pass her own cluster,
 #'                which will be used if \code{multicore == TRUE}. The user has to remember to stop the cluster. 
 #' @param control A list of control parameters, with entries:
 #'         \itemize{
-#'         \item{ \code{K} }{The number of folds to be used in cross-validation. By defaults \code{K = 10};}
-#'         \item{ \code{draw} }{ If \code{TRUE} the results of cross-validation will be plotted. \code{TRUE} by default;}
 #'         \item{ \code{method} }{The method used to calculate the normalizing constant. 
 #'                                Either "LAP" (laplace) or "IS" (importance sampling).}
 #'         \item{ \code{tol} }{The tolerance used to assess the convergence of the solution to the saddlepoint equation.

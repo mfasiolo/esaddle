@@ -13,7 +13,7 @@
 #'                signature function(.y, .lambda, ...).       
 #' @param mst (optional) minimum spanning tree which can be provided by the user.
 #' @param ... extra arguments to be passed to objFun() and gradFun()
-#' @author Matteo Fasiolo <matteo.fasiolo@@gmail.com> and Simon Wood.
+#' @author Matteo Fasiolo <matteo.fasiolo@@gmail.com>.
 #' @export mstOptim
 #'
 

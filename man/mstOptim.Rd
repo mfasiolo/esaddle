@@ -28,6 +28,6 @@ signature function(.y, .lambda, ...).}
 Solving multiple related problems using smart initialization
 }
 \author{
-Matteo Fasiolo <matteo.fasiolo@gmail.com> and Simon Wood.
+Matteo Fasiolo <matteo.fasiolo@gmail.com>.
 }
 
