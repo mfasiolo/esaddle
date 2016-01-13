@@ -26,6 +26,8 @@
 #'         \item{ \code{mix} }{The mixture of normal-saddlepoint used (1 means only saddlepoint);}
 #'         \item{ \code{grad} }{The gradient of the log-density at y (optional);}
 #'         }
+#' @references Fasiolo, M., Wood, S. N., Hartig, F. and Bravington, M. V. (2016). 
+#'             An Extended Empirical Saddlepoint Approximation for Intractable Likelihoods. ArXiv http://arxiv.org/abs/1601.01849.
 #' @author Matteo Fasiolo <matteo.fasiolo@@gmail.com> and Simon N. Wood.
 #' @export
 #'

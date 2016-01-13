@@ -49,4 +49,8 @@ Gives a pointwise evaluation of the empirical saddlepoint and optionally of
 \author{
 Matteo Fasiolo <matteo.fasiolo@gmail.com> and Simon N. Wood.
 }
+\references{
+Fasiolo, M., Wood, S. N., Hartig, F. and Bravington, M. V. (2016). 
+            An Extended Empirical Saddlepoint Approximation for Intractable Likelihoods. ArXiv XXX.
+}
 

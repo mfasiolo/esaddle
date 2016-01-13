@@ -1,6 +1,6 @@
 
 This package implements the Extended Empirical Saddlepoint density approximation (ESA) described in  
-[Fasiolo et al., 2016](XXX). The documentation is fairly sparse, but most of the information is contained in the paper.
+[Fasiolo et al., 2016](http://arxiv.org/abs/1601.01849). The documentation is fairly sparse, but most of the information is contained in the paper.
 
 The main functions are:
 - `dsaddle` which can be used to evaluate the ESA, given some data.
@@ -126,5 +126,5 @@ tmp <- selectDecay(decay = c(0.005, 0.01, 0.1, 0.25, 0.5, 1, 5, Inf),
 References
 ----------------------------
   
-  * Fasiolo, M., Wood, S. N., Hartig, F. and Bravington, M. V. (2016). An Extended Empirical Saddlepoint Approximation for Intractable Likelihoods. ArXiv XXX.
+  * Fasiolo, M., Wood, S. N., Hartig, F. and Bravington, M. V. (2016). An Extended Empirical Saddlepoint Approximation for Intractable Likelihoods. ArXiv http://arxiv.org/abs/1601.01849.
   
