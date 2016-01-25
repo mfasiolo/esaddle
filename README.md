@@ -11,6 +11,8 @@ Here we describe how to use them with two simple examples. In the first example 
 density to approximate an univariate Gamma(2, 1) density.
 
 ```R
+library("devtools")
+install_github("mfasiolo/esaddle")
 library(esaddle)
 
 ###################################
