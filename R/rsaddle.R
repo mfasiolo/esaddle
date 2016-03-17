@@ -32,7 +32,7 @@
 rsaddle <- function(n, X, decay,
                     multicore = !is.null(cluster), cluster = NULL, ncores = detectCores() - 1,  ...)
 {
-  prop <- rmvn(n, 2 * colMeans(X), 2 * cov(X))
+  prop <- rmvn(n, colMeans(X), 1.5 * cov(X))
   
   w <- dsaddle(prop, X = X, decay = decay, multicore = multicore, ncores = ncores, cluster = cluster, ...)$llk / 
        dmvn(prop, colMeans(X), cov(X))
