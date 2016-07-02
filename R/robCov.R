@@ -11,7 +11,8 @@
 #'                          with Mahalanobis distance, \code{d}, less than \code{d.0}. Otherwise weights are 
 #'                          \code{d.0*exp(-.5*(d-d.0)^2/beta)/d}. The defaults are as recommended by Campbell.
 #'                          This routine also uses pre-conditioning to ensure good scaling and stable 
-#'                          numerical calculations.
+#'                          numerical calculations. If some of the columns of \code{sY} has zero variance, these
+#'                          are removed.
 #' @return A list where:
 #'         \itemize{
 #'         \item{\code{COV}}{ The estimated covariance matrix.}
@@ -20,6 +21,9 @@
 #'         \item{\code{half.ldet.V}}{ Half the log of the determinant of the covariance matrix;}
 #'         \item{\code{mY}}{ The estimated mean;} 
 #'         \item{\code{sd}}{ The estimated standard deviations of each variable.}
+#'         \item{\code{w}}{ This is \code{w1/sum(w1)*ncol(sY)}, where \code{w1} are the weights of Campbell (1980).}
+#'         \item{\code{lowVar}}{ The indexes of the columns of \code{sY} whose variance is zero (if any). These 
+#'                               variable were removed and excluded from the covariance matrix. }
 #'          }
 #' @references Krzanowski, W.J. (1988) Principles of Multivariate Analysis. Oxford.
 #'             Campbell, N.A. (1980) Robust procedures in multivariate analysis I: robust covariance estimation. JRSSC 29, 231-237. 
@@ -81,7 +85,7 @@ robCov <- function(sY, alpha=2, beta=1.25) {
   d0 <- sqrt(nStats) + alpha/sqrt(2)
   w <- d*0 + 1
   ind <- d>d0
-  w[ind] <- exp(-.5*(d[ind]-d0)^2/beta)*d0/d[ind] 
+  w[ind] <- exp(-.5*(d[ind]-d0)^2/beta^2)*d0/d[ind] 
   
   ## The following lines all commented out because we want to use only the median for mY
   #if( nLow ) sY <- sY[-lowVar, , drop = FALSE]
@@ -105,7 +109,7 @@ robCov <- function(sY, alpha=2, beta=1.25) {
     d0 <- sqrt(nStats) + alpha2/sqrt(2)
     w <- d * 0 + 1
     ind <- d > d0
-    w[ind] <- exp(-0.5 * (d[ind] - d0)^2/beta2) * d0/d[ind]
+    w[ind] <- exp(-0.5 * (d[ind] - d0)^2/beta2^2) * d0/d[ind]
   }
   
   list(E=E, half.ldet.V=half.ldet.V, mY=mY, sd=sd, COV = COV, weights = w / sum(w) * nObs, lowVar = lowVar)
