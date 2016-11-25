@@ -21,7 +21,7 @@
 #'         \item{\code{half.ldet.V}}{ Half the log of the determinant of the covariance matrix;}
 #'         \item{\code{mY}}{ The estimated mean;} 
 #'         \item{\code{sd}}{ The estimated standard deviations of each variable.}
-#'         \item{\code{w}}{ This is \code{w1/sum(w1)*ncol(sY)}, where \code{w1} are the weights of Campbell (1980).}
+#'         \item{\code{weights}}{ This is \code{w1/sum(w1)*ncol(sY)}, where \code{w1} are the weights of Campbell (1980).}
 #'         \item{\code{lowVar}}{ The indexes of the columns of \code{sY} whose variance is zero (if any). These 
 #'                               variable were removed and excluded from the covariance matrix. }
 #'          }

@@ -2,36 +2,64 @@
 % Please edit documentation in R/findMode.R
 \name{findMode}
 \alias{findMode}
-\title{Finding the mode of the empirical saddelpoint density}
+\title{Finding the mode of the empirical saddlepoint density}
 \usage{
 findMode(X, decay, init = NULL, method = "BFGS", hess = FALSE,
   sadControl = list(), ...)
 }
 \arguments{
-\item{X}{n by d matrix containing the data.}
+\item{X}{an n by d matrix containing the data.}
 
-\item{decay}{Rate at which the SPA falls back on a normal density. Should be a positive number,
-by default set to 0.5.}
+\item{decay}{rate at which the SPA falls back on a normal density. Should be a positive number. See Fasiolo et al. (2016)
+for details.}
 
 \item{init}{d-dimensional vector containing the starting point for the optimization. By default
-it is equal to colMeans(X).}
+it is equal to \code{colMeans(X)}.}
 
-\item{method}{Optimization method used by stats::optim(), see ?optim for details. By default it is "BFGS".}
+\item{method}{optimization method used by \code{stats::optim()}, see ?optim for details. By default it is "BFGS".}
 
-\item{...}{Extra arguments to be passed to the optimization routine stats::optim.}
+\item{hess}{if TRUE also an estimate of the Hessian at the mode will be returned.}
 
-\item{sadTol}{Tolerance used to assess the convergence of the rootfinding routine used to fit
-the saddlepoint density. Default value is 1e-6.}
+\item{sadControl}{list corresponding to the \code{control} argument in the \code{dsaddle} function.}
+
+\item{...}{Extra arguments to be passed to the optimization routine \code{stats::optim}.}
 }
 \value{
 A list where \code{mode} is the location of mode of the empirical saddlepoint density,
-        while the other entries are the same as for stats::optim.
+        \code{logDens} is the log-density at the mode and \code{hess} (present only if argument \code{hess==TRUE})
+        is the approximate Hessian at convergence. The other entries are the same as for \code{stats::optim}.
 }
 \description{
-Given a sample from a d-dimensinal distribution the routine
-             find the mode of the corresponding empirical saddlepoint density.
+Given a sample from a d-dimensional distribution, the routine
+             finds the mode of the corresponding Extended Empirical Saddlepoint (EES) density.
+}
+\examples{
+# library(esaddle)
+set.seed(4141)
+x <- rgamma(1000, 2, 1)
+
+# Fixing tuning parameter of EES
+decay <-  0.05
+
+# Evaluating EES at several point
+xSeq <- seq(-2, 8, length.out = 200)
+tmp <- dsaddle(y = xSeq, X = x, decay = decay, log = TRUE)  # Un-normalized EES
+
+# Plotting true density, EES and normal approximation
+plot(xSeq, exp(tmp$llk), type = 'l', ylab = "Density", xlab = "x")
+lines(xSeq, dgamma(xSeq, 2, 1), col = 3)
+suppressWarnings( rug(x) )
+legend("topright", c("EES", "Truth"), col = c(1, 3), lty = 1)
+
+# Find mode and plot it
+res <- findMode(x, init = mean(x), decay = decay)$mode
+abline(v = res, lty = 2, lwd = 1.5)
 }
 \author{
 Matteo Fasiolo <matteo.fasiolo@gmail.com>.
+}
+\references{
+Fasiolo, M., Wood, S. N., Hartig, F. and Bravington, M. V. (2016). 
+            An Extended Empirical Saddlepoint Approximation for Intractable Likelihoods. ArXiv http://arxiv.org/abs/1601.01849.
 }
 

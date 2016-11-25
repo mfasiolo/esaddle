@@ -2,7 +2,7 @@
 % Please edit documentation in R/rsaddle.R
 \name{rsaddle}
 \alias{rsaddle}
-\title{Simulate random variables from Extended Empirical Saddlepoint density (ESA)}
+\title{Simulate random variables from the Extended Empirical Saddlepoint density (ESS)}
 \usage{
 rsaddle(n, X, decay, multicore = !is.null(cluster), cluster = NULL,
   ncores = detectCores() - 1, ...)
@@ -10,40 +10,46 @@ rsaddle(n, X, decay, multicore = !is.null(cluster), cluster = NULL,
 \arguments{
 \item{n}{number of simulated vectors.}
 
-\item{X}{m by d matrix containing the data.}
+\item{X}{an m by d matrix containing the data.}
 
-\item{decay}{Rate at which the SPA falls back on a normal density. Should be a positive number,
-by default set to 0.5.}
+\item{decay}{rate at which the ESS falls back on a normal density. Should be a positive number. See Fasiolo et al. (2016)
+for details.}
 
-\item{multicore}{if TRUE each fold will be run on a different core.}
+\item{multicore}{if TRUE the ESS densities corresponding the samples will be evaluated in parallel.}
 
 \item{cluster}{an object of class \code{c("SOCKcluster", "cluster")}. This allowes the user to pass her own cluster,
 which will be used if \code{multicore == TRUE}. The user has to remember to stop the cluster.}
 
 \item{ncores}{number of cores to be used.}
 
-\item{...}{additional arguments to be  A list of control parameters with entries:
-\itemize{
-\item{ \code{method} }{The method used to calculate the normalizing constant. 
-                       Either "LAP" (laplace) or "IS" (importance sampling).}
-\item{ \code{nNorm} }{If control$method == "IS", this is the number of importance samples used.}
-\item{ \code{tol} }{The tolerance used to assess the convergence of the solution to the saddlepoint equation.
-                    The default is 1e-6.}
-}}
+\item{...}{additional arguments to be passed to \code{dsaddle}.}
 }
 \value{
 An n by d matrix containing the simulated vectors.
 }
 \description{
-Simulate random variables from the Extended Empirical Saddlepoint density (ESA), using importance 
+Simulate random variables from the Extended Empirical Saddlepoint density (ESS), using importance 
              sampling and then resampling according to the importance weights.
 }
+\details{
+Notice that, while importance sampling is used, the output is a matrix of unweighted samples, obtained by resampling
+         with probabilities proportional to the importance weights.
+}
 \examples{
+# Simulate bivariate data, where each marginal distribution is Exp(2)
 X <- matrix(rexp(2 * 1e3), 1e3, 2)
-Z <- rsaddle(500, X, decay = 0.1)
+
+# Simulate bivariate data from a saddlepoint fitted to X
+Z <- rsaddle(1000, X, decay = 0.5)
+
+# Look at first marginal distribution
 hist( Z[ , 1] )
 }
 \author{
 Matteo Fasiolo <matteo.fasiolo@gmail.com>.
+}
+\references{
+Fasiolo, M., Wood, S. N., Hartig, F. and Bravington, M. V. (2016). 
+            An Extended Empirical Saddlepoint Approximation for Intractable Likelihoods. ArXiv http://arxiv.org/abs/1601.01849.
 }
 

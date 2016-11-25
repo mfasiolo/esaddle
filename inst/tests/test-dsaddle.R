@@ -13,7 +13,7 @@ test_that( "Testing saddlepoint density mode-finding", {
   
   res <- findMode(x, init = 8, decay = decay)$mode
   
-  expect_less_than( abs(res - 1.03), 1e-1 )
+  expect_lt( abs(res - 1.03), 1e-1 )
   
   # Testing gradient with finite differences
   delta <- 1e-6
@@ -23,7 +23,7 @@ test_that( "Testing saddlepoint density mode-finding", {
   
   sadGrad <- -dsaddle(y = posit + delta/2, X = x, decay = decay, deriv = TRUE)$grad
   
-  expect_less_than( abs(fd - sadGrad), 1e-3 )
+  expect_lt( abs(fd - sadGrad), 1e-3 )
   
   
   #########
@@ -97,9 +97,9 @@ test_that( "Testing if normalization is accounted for", {
                control = list("method" = "IS", "nNorm" = 10)) 
   
   # Test log-likelihood and gradient
-  expect_less_than( max(abs(a$llk - b$llk - log(sc)) / abs(a$llk)), 1e-6 )
-  expect_less_than( max(abs(a$grad - b$grad*sc) / abs(a$grad)), 1e-6 )
-  expect_less_than( max(abs(a$logNorm - b$logNorm) / abs(a$logNorm)), 1e-6 )
+  expect_lt( max(abs(a$llk - b$llk - log(sc)) / abs(a$llk)), 1e-6 )
+  expect_lt( max(abs(a$grad - b$grad*sc) / abs(a$grad)), 1e-6 )
+  expect_lt( max(abs(a$logNorm - b$logNorm) / abs(a$logNorm)), 1e-6 )
   
   ###############
   ########## Multiple dimensions
@@ -127,9 +127,9 @@ test_that( "Testing if normalization is accounted for", {
                 control = list("method" = "LAP")) 
     
   # Test log-likelihood and gradient
-  expect_less_than( max(abs(a$llk - b$llk - sum(log(abs(diag(sc))))) / abs(a$llk)), 1e-2 )
-  expect_less_than( max(abs(a$grad - b$grad%*%sc) / abs(a$grad)), 1e-6 )
-  expect_less_than( max(abs(a$logNorm - b$logNorm) / abs(a$logNorm)), 1e-2 )
+  expect_lt( max(abs(a$llk - b$llk - sum(log(abs(diag(sc))))) / abs(a$llk)), 1e-2 )
+  expect_lt( max(abs(a$grad - b$grad%*%sc) / abs(a$grad)), 1e-6 )
+  expect_lt( max(abs(a$logNorm - b$logNorm) / abs(a$logNorm)), 1e-2 )
   
    
 }

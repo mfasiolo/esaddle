@@ -1,23 +1,23 @@
 #####
-#' Solving multiple related problems using smart initialization
-#' @description Solving multiple related problems using smart initialization
-#'
-#' @param y matrix where each row represents the parameters of a different problem
-#' @param lamHat matrix where each row represents the approximate solution to each problem.
-#'               This is used to calculate the distance between problems. For instance the distance
-#'               between the i-th and the j-th problem is the Euclidean distance between lamHat[i, ] and lamHat[j, ].
-#'               In some cases it is appropriate to choose lamHat = y.
-#' @param objFun function that solves the problem. I has signature function(.y, .lambda, ...) and it returns a list
-#'               that contains the vector "lambda", which is the solution to the problem. 
-#' @param gradFun function that returns a matrix containing the derivatives of lambda wrt y. It has 
-#'                signature function(.y, .lambda, ...).       
-#' @param mst (optional) minimum spanning tree which can be provided by the user.
-#' @param ... extra arguments to be passed to objFun() and gradFun()
-#' @author Matteo Fasiolo <matteo.fasiolo@@gmail.com>.
-#' @export mstOptim
-#'
-
-mstOptim  <- function(y, lamHat, objFun, gradFun, mst = NULL, ...)
+# Solving multiple related optimization problems using smart initialization
+# @description Solving multiple related problems using smart initialization
+# 
+# @param y matrix where each row represents the parameters of a different problem
+# @param lamHat matrix where each row represents the approximate solution to each problem.
+#               This is used to calculate the distance between problems. For instance the distance
+#               between the i-th and the j-th problem is the Euclidean distance between lamHat[i, ] and lamHat[j, ].
+#               In some cases it is appropriate to choose lamHat = y.
+# @param objFun function that solves the problem. I has signature function(.y, .lambda, ...) and it returns a list
+#               that contains the vector "lambda", which is the solution to the problem.
+# @param gradFun function that returns a matrix containing the derivatives of lambda wrt y. It has
+#                signature function(.y, .lambda, ...).
+# @param mst (optional) minimum spanning tree which can be provided by the user.
+# @param ... extra arguments to be passed to objFun() and gradFun()
+# @return ???
+# @author Matteo Fasiolo <matteo.fasiolo@@gmail.com>.
+# @export mstOptim
+#
+.mstOptim  <- function(y, lamHat, objFun, gradFun, mst = NULL, ...)
 {
   
   ny <- nrow(y)

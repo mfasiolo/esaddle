@@ -12,7 +12,7 @@ test_that("mstOptim works well with saddlepoint: Univariate case", {
   slow <- dsaddle(y = xSeq, X = x,  decay = decay, deriv = FALSE, log = TRUE)
   fast <- dsaddle(y = xSeq, X = x,  decay = decay, deriv = FALSE, log = TRUE, fastInit = TRUE)
   
-  expect_less_than( max(abs(slow$llk - fast$llk) / abs(slow$llk)), 1e-4 )
+  expect_lt( max(abs(slow$llk - fast$llk) / abs(slow$llk)), 1e-4 )
   
   plot(slow$mix, slow$niter - fast$niter, xlab = "Sad-Gaus Mix", ylab = "Iterations saved", 
        main = "Univariate Case")  
@@ -62,8 +62,8 @@ test_that("mstOptim works well with saddlepoint: Multivariate Gaussian case", {
   superFast <- dsaddle(y = Y, X = X,  decay = decay, deriv = FALSE, log = TRUE, 
                        fastInit = TRUE, control = list("mst" = mst))
   
-  expect_less_than( max(abs(slow$llk - fast$llk) / abs(slow$llk)), 1e-4 )
-  expect_less_than( max(abs(superFast$llk - fast$llk) / abs(superFast$llk)), 1e-4 )
+  expect_lt( max(abs(slow$llk - fast$llk) / abs(slow$llk)), 1e-4 )
+  expect_lt( max(abs(superFast$llk - fast$llk) / abs(superFast$llk)), 1e-4 )
   
   plot(slow$mix, slow$niter - fast$niter, xlab = "Sad-Gaus Mix", ylab = "Iterations saved", 
        main = "Multivariate Gaussian Case")
@@ -109,8 +109,8 @@ test_that("mstOptim works well with saddlepoint: Multivariate Gamma case", {
   superFast <- dsaddle(y = Y, X = X,  decay = decay, deriv = FALSE, log = TRUE, 
                        fastInit = TRUE, control = list("mst" = mst))
       
-  expect_less_than( max(abs(slow$llk - fast$llk) / abs(slow$llk)), 1e-4 )
-  expect_less_than( max(abs(superFast$llk - fast$llk) / abs(superFast$llk)), 1e-4 )
+  expect_lt( max(abs(slow$llk - fast$llk) / abs(slow$llk)), 1e-4 )
+  expect_lt( max(abs(superFast$llk - fast$llk) / abs(superFast$llk)), 1e-4 )
   
   plot(slow$mix, slow$niter - fast$niter, xlab = "Sad-Gaus Mix", ylab = "Iterations saved", 
        main = "Multivariate Gamma Case")

@@ -1,38 +1,71 @@
 #####
-#' Empirical saddlepoint density 
-#' @description Gives a pointwise evaluation of the empirical saddlepoint and optionally of
-#'              its gradient at position y
+#' Evaluating the Extended Empirical Saddlepoint (EES) density 
+#' @description Gives a pointwise evaluation of the EES density (and optionally of its gradient) at one or more 
+#'              locations.
 #'
-#' @param y points at which the SPA is evaluated (d dimensional vector) or an n by d matrix, each row indicating
+#' @param y points at which the EES is evaluated (d dimensional vector) or an n by d matrix, each row indicating
 #'          a different position.
 #' @param X n by d matrix containing the data.
-#' @param tol Tolerance used to assess the convergence of the rootfinding routine used to fit
-#'            the saddlepoint density. Default value is 1e-6.
-#' @param decay Rate at which the SPA falls back on a normal density. Should be a positive number,
-#'              by default set to 0.5.
+#' @param decay rate at which the EES falls back on a normal density approximation, fitted to \code{X}. 
+#'              It must be a positive number, and it is inversely proportional to the complexity of the fit.
+#'              Setting it to \code{Inf} leads to a Gaussian fit.  
 #' @param deriv If TRUE also the gradient of the log-saddlepoint density is returned.
 #' @param log If TRUE the log of the saddlepoint density is returned.
+#' @param normalize If TRUE the normalizing constant of the EES density will be computed. FALSE by 
+#'                  default.
+#' @param fastInit If TRUE a smart initialization is used to start the solution of the saddlepoint equation 
+#'                 corresponding to each row of y. It can lead to faster computation if n >> d and d < 5. FALSE by default. 
 #' @param control A list of control parameters with entries:
 #'         \itemize{
-#'         \item{ \code{method} }{The method used to calculate the normalizing constant. 
-#'                                Either "LAP" (laplace) or "IS" (importance sampling).}
-#'         \item{ \code{nNorm} }{If control$method == "IS", this is the number of importance samples used.}
-#'         \item{ \code{tol} }{The tolerance used to assess the convergence of the solution to the saddlepoint equation.
+#'         \item{ \code{method} }{the method used to calculate the normalizing constant. 
+#'                                Either "LAP" (laplace approximation) or "IS" (importance sampling).}
+#'         \item{ \code{nNorm} }{if control$method == "IS", this is the number of importance samples used.}
+#'         \item{ \code{tol} }{the tolerance used to assess the convergence of the solution to the saddlepoint equation.
 #'                             The default is 1e-6.}
 #'         }
+#' @param multicore  if TRUE the empirical saddlepoint density at each row of y will be evaluated in parallel.
+#' @param ncores   number of cores to be used.
+#' @param cluster an object of class \code{c("SOCKcluster", "cluster")}. This allowes the user to pass her own cluster,
+#'                which will be used if \code{multicore == TRUE}. The user has to remember to stop the cluster. 
 #' @return A list with entries:
 #'         \itemize{
-#'         \item{ \code{llk} }{The value of the empirical saddlepoint at y;}
-#'         \item{ \code{mix} }{The mixture of normal-saddlepoint used (1 means only saddlepoint);}
-#'         \item{ \code{grad} }{The gradient of the log-density at y (optional);}
+#'         \item{ \code{llk} }{the value of the EES log-density at each location y;}
+#'         \item{ \code{mix} }{for each location y, the fraction of saddlepoint used: 
+#'                             1 means that only ESS is used and 0 means that only a Gaussian fit is used;}
+#'         \item{ \code{iter} }{for each location y, the number of iteration needed to solve the 
+#'                              saddlepoint equation;}
+#'         \item{ \code{lambda} }{an n by d matrix, where the i-th row is the solution of the saddlepoint 
+#'                                equation corresponding to the i-th row of y;}
+#'         \item{ \code{grad} }{the gradient of the log-density at y (optional);}
+#'         \item{ \code{logNorm} }{the estimated log normalizing constant (optional);}
 #'         }
 #' @references Fasiolo, M., Wood, S. N., Hartig, F. and Bravington, M. V. (2016). 
 #'             An Extended Empirical Saddlepoint Approximation for Intractable Likelihoods. ArXiv http://arxiv.org/abs/1601.01849.
 #' @author Matteo Fasiolo <matteo.fasiolo@@gmail.com> and Simon N. Wood.
+#' @examples 
+#' library(esaddle)
+#' 
+#' ### Simple univariate example
+#' set.seed(4141)
+#' x <- rgamma(1000, 2, 1)
+#' 
+#' # Evaluating EES at several point
+#' xSeq <- seq(-2, 8, length.out = 200)
+#' tmp <- dsaddle(y = xSeq, X = x, decay = 0.05, log = TRUE)  # Un-normalized EES
+#' tmp2 <- dsaddle(y = xSeq, X = x, decay = 0.05,             # EES normalized by importance sampling
+#'                 normalize = TRUE, control = list("method" = "IS", nNorm = 500), log = TRUE)
+#' 
+#' # Plotting true density, EES and normal approximation
+#' plot(xSeq, exp(tmp$llk), type = 'l', ylab = "Density", xlab = "x")
+#' lines(xSeq, dgamma(xSeq, 2, 1), col = 3)
+#' lines(xSeq, dnorm(xSeq, mean(x), sd(x)), col = 2)
+#' lines(xSeq, exp(tmp2$llk), col = 4)
+#' suppressWarnings( rug(x) )
+#' legend("topright", c("EES un-norm", "EES normalized", "Truth", "Gaussian"), 
+#'         col = c(1, 4, 3, 2), lty = 1)
 #' @export
 #'
-
-dsaddle <- function(y, X,  decay = 0.5, deriv = FALSE, log = FALSE, 
+dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE, 
                      normalize = FALSE, fastInit = FALSE, control = list(), 
                      multicore = !is.null(cluster), ncores = detectCores() - 1, cluster = NULL) {
   ## X[i,j] is ith rep of jth variable; y is vector of variables.
@@ -120,7 +153,7 @@ dsaddle <- function(y, X,  decay = 0.5, deriv = FALSE, log = FALSE,
     if( is.null(ctrl$mst) ) lamHat <- y else lamHat <- NULL
     
     # Evaluate density at multiple points using minimum spanning tree
-    out <- mstOptim(y, lamHat, objFun, gradFun, mst = ctrl$mst)
+    out <- .mstOptim(y, lamHat, objFun, gradFun, mst = ctrl$mst)
     
   } else{
     out <- list()
@@ -269,7 +302,7 @@ dsaddle <- function(y, X,  decay = 0.5, deriv = FALSE, log = FALSE,
     b <- b1
     
   } ## end of Newton loop
-  ## lambda is the SPA lambda...
+  ## lambda is the EES lambda...
   
   if(kk > 50 || jj > 20) warning(paste("The convergence of the saddlepoint root-finding is quite slow! \n",
                                        "Outer root-finding Newton-Raphson:", kk, "iter \n",

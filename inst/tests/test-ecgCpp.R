@@ -63,9 +63,9 @@ test_that( "Testing C++ ecgf function against the oracle", {
                kum2_ = kum2,
                PACKAGE = "esaddle")
   
-  expect_less_than( abs(oracle[[1]] - cpp_res[[1]]), 1e-6 )
-  expect_less_than( sum(abs(oracle[[2]] - cpp_res[[2]])), 1e-6 )
-  expect_less_than( sum(sum(abs(oracle[[3]] - cpp_res[[3]]))), 1e-5 )
+  expect_lt( abs(oracle[[1]] - cpp_res[[1]]), 1e-6 )
+  expect_lt( sum(abs(oracle[[2]] - cpp_res[[2]])), 1e-6 )
+  expect_lt( sum(sum(abs(oracle[[3]] - cpp_res[[3]]))), 1e-5 )
 
 }
 )

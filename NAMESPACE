@@ -4,13 +4,15 @@ exportPattern("^[[:alpha:]]+")
 # Imported stuff
 importFrom(compiler, "cmpfun")
 
+importFrom(stats, "cov", "optim", "sd")
+
+importFrom(graphics, "par", "matplot", "lines", "abline", "points", "axis")
+
 importFrom(mvnfast, "rmvn", "dmvn", "maha")
 
 importFrom(plyr, "alply", "laply", "aaply", "llply", "rlply")
 
 importFrom(doSNOW, "registerDoSNOW")
-
-importFrom(Rcpp)
 
 importFrom(parallel, "clusterApply")
 importFrom(parallel, "clusterEvalQ")

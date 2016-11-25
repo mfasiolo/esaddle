@@ -2,31 +2,39 @@
 % Please edit documentation in R/demvn.R
 \name{demvn}
 \alias{demvn}
-\title{Empirical multivariate Gaussian density}
+\title{Evaluate the density of a multivariate Gaussian fit}
 \usage{
-demvn(y, X, log = FALSE, verbose = TRUE)
+demvn(y, X, log = FALSE, verbose = TRUE, alpha = 2, beta = 1.25)
 }
 \arguments{
-\item{y}{points at which the MVN is evaluated (d dimensional vector) or an n by d matrix, each row indicating
-a different position.}
+\item{y}{points at which the MVN is evaluated. It can be either a d-dimensional vector or an n by d matrix, 
+each row indicating a different position.}
 
-\item{X}{n by d matrix containing the data.}
+\item{X}{an n by d matrix containing the data.}
 
-\item{log}{If TRUE the log of the log-density is returned.}
+\item{log}{if TRUE the log-density is returned.}
 
 \item{verbose}{currently not used.}
+
+\item{alpha}{tuning parameter of \code{robCov}, see \code{?robCov} for details.}
+
+\item{beta}{tuning parameter of \code{robCov}, see \code{?robCov} for details.}
 }
 \value{
-The density of the empirical MVN, evaluated at y.
+A vector where the i-th entry is the density corresponding to the i-th row of y.
 }
 \description{
-Gives a pointwise evaluation of the multivariate normal (MVN) fit to X at position y.
+Given a sample X, it gives a pointwise evaluation of the multivariate normal (MVN) density fit at position y.
+}
+\details{
+The covariance matrix is estimated robustly, using the \code{robCov} function.
 }
 \examples{
-X <- matrix(rnorm(2 * 1e3), 1e3, 2)
-demvn(rnorm(2), X, log = TRUE)
+library(esaddle)
+X <- matrix(rnorm(2 * 1e3), 1e3, 2) # Sample used to fit a multivariate Gaussian
+demvn(rnorm(2), X, log = TRUE)      # Evaluate the fitted log-density at a random location
 }
 \author{
-Matteo Fasiolo <matteo.fasiolo@gmail.com> and Simon Wood.
+Matteo Fasiolo <matteo.fasiolo@gmail.com> and Simon N. Wood.
 }
 

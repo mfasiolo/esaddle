@@ -22,6 +22,9 @@ A list where:
         \item{\code{half.ldet.V}}{ Half the log of the determinant of the covariance matrix;}
         \item{\code{mY}}{ The estimated mean;} 
         \item{\code{sd}}{ The estimated standard deviations of each variable.}
+        \item{\code{weights}}{ This is \code{w1/sum(w1)*ncol(sY)}, where \code{w1} are the weights of Campbell (1980).}
+        \item{\code{lowVar}}{ The indexes of the columns of \code{sY} whose variance is zero (if any). These 
+                              variable were removed and excluded from the covariance matrix. }
          }
 }
 \description{
@@ -33,9 +36,10 @@ Campbell (1980) suggests an estimator of the covariance matrix which downweights
                          at more than some Mahalanobis distance \code{d.0} from the mean.
                          \code{d.0} is \code{sqrt(nrow(sY))+alpha/sqrt(2)}. Weights are one for observations 
                          with Mahalanobis distance, \code{d}, less than \code{d.0}. Otherwise weights are 
-                         \code{d.0*exp(-.5*(d-d.0)^2/beta)/d}. The defaults are as recommended by Campbell.
+                         \code{d.0*exp(-.5*(d-d.0)^2/beta^2)/d}. The defaults are as recommended by Campbell.
                          This routine also uses pre-conditioning to ensure good scaling and stable 
-                         numerical calculations.
+                         numerical calculations. If some of the columns of \code{sY} has zero variance, these
+                         are removed.
 }
 \examples{
 p <- 5;n <- 100

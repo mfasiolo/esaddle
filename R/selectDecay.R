@@ -1,55 +1,59 @@
-
 #####
-#' Cross-validation for the empirical saddlepoint density
-#' @description Performs cross-validation to choose the \code{decay} tuning parameters 
+#' Tuning the Extended Empirical Saddlepoint (EES) density by cross-validation
+#' @description Performs k-fold cross-validation to choose the EES's tuning parameter,
 #'              which determines the mixture between a consistent and a Gaussian estimator
-#'              of the Cumulant Generating Function (ECGF).
+#'              of the Cumulant Generating Function (CGF).
 #'
-#' @param decay Numeric vector containing the possible value of the tuning parameter.
+#' @param decay Numeric vector containing the possible values of the tuning parameter.
 #' @param simulator  Function with prototype \code{function(...)} that will be called \code{nrep} times
 #'                  to simulate \code{d}-dimensional random variables. 
-#'                  Each time \code{simulator} is called it will return a \code{n} by \code{d} matrix.
-#' @param K The number of folds to be used in cross-validation. By default \code{K = 10}.
+#'                  Each time \code{simulator} is called, it will return a \code{n} by \code{d} matrix.
+#' @param K the number of folds to be used in cross-validation.
 #' @param nrep Number of times the whole cross-validation procedure will be repeated, by calling
 #'             \code{simulator} to generate random variable and computing the cross-validation score
-#'             for every element of \code{decay}.
-#' @param normalize is TRUE the normalizing constant of ESA is normalized at each value of \code{decay}.
+#'             for every element of the \code{decay} vector.
+#' @param normalize if TRUE the normalizing constant of EES is normalized at each value of \code{decay}.
 #'                  FALSE by default.
-#' @param draw ff \code{TRUE} the results of cross-validation will be plotted. \code{TRUE} by default.
-#' @param multicore  if TRUE each fold will be run on a different core.
+#' @param draw if \code{TRUE} the results of cross-validation will be plotted. \code{TRUE} by default.
+#' @param multicore  if TRUE each fold will run on a different core.
 #' @param ncores   number of cores to be used.
 #' @param cluster an object of class \code{c("SOCKcluster", "cluster")}. This allowes the user to pass her own cluster,
 #'                which will be used if \code{multicore == TRUE}. The user has to remember to stop the cluster. 
-#' @param control A list of control parameters, with entries:
+#' @param control a list of control parameters, with entries:
 #'         \itemize{
 #'         \item{ \code{method} }{The method used to calculate the normalizing constant. 
-#'                                Either "LAP" (laplace) or "IS" (importance sampling).}
+#'                                Either "LAP" (laplace approximation) or "IS" (importance sampling).}
 #'         \item{ \code{tol} }{The tolerance used to assess the convergence of the solution to the saddlepoint equation.
 #'                             The default is 1e-6.}
 #'         \item{ \code{nNorm} }{ Number of simulations to be used in order to estimate the normalizing constant of the saddlepoint density.
 #'                                By default equal to 1e3.}
 #'         }
+#' @param ... extra arguments to be passed to \code{simulator}. 
 #' @return A list with entries:
 #'         \itemize{
-#'          \item{ \code{summary} }{ A matrix of summary results from the cross-validation procedure.  }
-#'         \item{ \code{negLogLik} }{A matrix \code{length{decay}} by \code{control$K*nrep} where the i-th row represent the negative loglikelihood
+#'         \item{ \code{negLogLik} }{A matrix \code{length{decay}} by \code{K*nrep} where the i-th row represent the negative loglikelihood
 #'                                   estimated for the i-th value of \code{decay}, while each column represents a different fold and repetition.}
+#'          \item{ \code{summary} }{ A matrix of summary results from the cross-validation procedure.  }
 #'         \item{ \code{normConst} }{ A matrix \code{length{decay}} by \code{nrep} where the i-th row contains the estimates of the normalizing constant.}
 #'         }
-#'         is returned invisibly.
-#'         If \code{control$draw == TRUE} the function will also plot the cross-validation curve. 
+#'         The list is returned invisibly. If \code{control$draw == TRUE} the function will also plot the cross-validation curve. 
 #' @author Matteo Fasiolo <matteo.fasiolo@@gmail.com>.
+#' @references Fasiolo, M., Wood, S. N., Hartig, F. and Bravington, M. V. (2016). 
+#'             An Extended Empirical Saddlepoint Approximation for Intractable Likelihoods. ArXiv http://arxiv.org/abs/1601.01849.
 #' @examples
-#' 
-#' # Saddlepoint is needed
-#' selectDecay(decay = c(0.05, 0.1, 0.5, 1), 
-#'             simulator = function(...) rgamma(100, 2, 1), 
-#'             nrep = 4)
+#' library(esaddle)
+#' # The data is far from normal: saddlepoint is needed and we expect 
+#' # cross validation to be minimized at low "decay"
+#' set.seed(4124)
+#' selectDecay(decay = c(0.001, 0.01, 0.05, 0.1, 0.5, 1), 
+#'             simulator = function(...) rgamma(500, 2, 1), 
+#'             K = 5)
 #'             
-#' # Saddlepoint is not needed
-#' selectDecay(decay = c(0.05, 0.1, 0.5, 1), 
-#'             simulator = function(...) rnorm(100, 0, 1), 
-#'             nrep = 4)
+#' # The data is far from normal: saddlepoint is not needed and we expect 
+#' #  the curve to be fairly flat for high "decay"
+#' selectDecay(decay = c(0.001, 0.01, 0.05, 0.1, 0.5, 1), 
+#'             simulator = function(...) rnorm(500, 0, 1), 
+#'             K = 5)
 #' 
 #' @export
 #'

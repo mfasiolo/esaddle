@@ -33,7 +33,7 @@ SEXP ecgfCpp(SEXP lambda_, SEXP X_, SEXP mix_, SEXP grad_, SEXP kum1_, SEXP kum2
       double sum_elx = sum( elx );
       mat elx_by_X(n, d); 
           
-      for(int ii = 0; ii < d; ii++) elx_by_X.col(ii) = X.col(ii) % elx;
+      for(unsigned int ii = 0; ii < d; ii++) elx_by_X.col(ii) = X.col(ii) % elx;
       
       double tmp_K = log( sum_elx / n ) + alpha;
       double K =  mix * tmp_K + (1 - mix) * ( dot(kum1, lambda) + 0.5 * dot(lambda, kum2 * lambda) );

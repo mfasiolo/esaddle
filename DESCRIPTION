@@ -1,17 +1,18 @@
 Package: esaddle
 Type: Package
-Title: Extended Empirical Saddlepoint density approximation.
-Version: 0.0.1
-Date: 2016-01-01
+Title: Extended Empirical Saddlepoint density approximations
+Version: 0.0.2
+Date: 2016-11-25
 Author: Matteo Fasiolo and Simon Wood
 Maintainer: Matteo Fasiolo <matteo.fasiolo@gmail.com>
-Description: Tools for fitting the Extended Empirical Saddlepoint density approximation.
+Description: Tools for fitting the Extended Empirical Saddlepoint (EES) density.
 License: GPL (>=2)
 URL: https://github.com/mfasiolo/esaddle
 Imports:
     Rcpp (>= 0.10.4),
     compiler,
     stats,
+    graphics,
     parallel,
     plyr,
     doSNOW,
