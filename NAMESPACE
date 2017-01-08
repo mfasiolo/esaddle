@@ -12,7 +12,7 @@ importFrom(mvnfast, "rmvn", "dmvn", "maha")
 
 importFrom(plyr, "alply", "laply", "aaply", "llply", "rlply")
 
-importFrom(doSNOW, "registerDoSNOW")
+importFrom(doParallel, "registerDoParallel")
 
 importFrom(parallel, "clusterApply")
 importFrom(parallel, "clusterEvalQ")

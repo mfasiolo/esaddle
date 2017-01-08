@@ -92,7 +92,7 @@ selectDecay <- function(decay,
     cluster <- tmp$cluster
     ncores <- tmp$ncores
     clusterCreated <- tmp$clusterCreated
-    registerDoSNOW(cluster)
+    registerDoParallel(cluster)
     
     if( K %% ncores ) message(paste("Number of folds (", K, ") is not a multiple of ncores (", ncores, ").", sep = ''))
   }

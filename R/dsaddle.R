@@ -107,7 +107,7 @@ dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE,
     cluster <- tmp$cluster
     ncores <- tmp$ncores
     clusterCreated <- tmp$clusterCreated
-    registerDoSNOW(cluster)
+    registerDoParallel(cluster)
   }
   
   # Pre-calculating covariance and normalizing
