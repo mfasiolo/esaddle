@@ -41,6 +41,8 @@ which will be used if \code{multicore == TRUE}. The user has to remember to stop
                     The default is 1e-6.}
 \item{ \code{nNorm} }{ Number of simulations to be used in order to estimate the normalizing constant of the saddlepoint density.
                        By default equal to 1e3.}
+\item{ \code{ml} } { if \code{method=="IS"} \code{nNorm}, random variables are generated from an importance density with covariance matrix 
+                     \code{ml*cov(X)}. By default the inflation factor is \code{ml=2}.}
 }}
 
 \item{...}{extra arguments to be passed to \code{simulator}.}
@@ -76,11 +78,10 @@ selectDecay(decay = c(0.001, 0.01, 0.05, 0.1, 0.5, 1),
             K = 5)
 
 }
-\author{
-Matteo Fasiolo <matteo.fasiolo@gmail.com>.
-}
 \references{
 Fasiolo, M., Wood, S. N., Hartig, F. and Bravington, M. V. (2016). 
             An Extended Empirical Saddlepoint Approximation for Intractable Likelihoods. ArXiv http://arxiv.org/abs/1601.01849.
 }
-
+\author{
+Matteo Fasiolo <matteo.fasiolo@gmail.com>.
+}

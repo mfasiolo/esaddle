@@ -40,11 +40,10 @@ K$K # CGF
 K$dK # CGF' (gradient)
 K$d2K # CGF'' (Hessian)
 }
-\author{
-Matteo Fasiolo <matteo.fasiolo@gmail.com> and Simon N. Wood.
-}
 \references{
 Fasiolo, M., Wood, S. N., Hartig, F. and Bravington, M. V. (2016). 
             An Extended Empirical Saddlepoint Approximation for Intractable Likelihoods. ArXiv http://arxiv.org/abs/1601.01849.
 }
-
+\author{
+Matteo Fasiolo <matteo.fasiolo@gmail.com> and Simon N. Wood.
+}

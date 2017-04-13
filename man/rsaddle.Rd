@@ -4,8 +4,8 @@
 \alias{rsaddle}
 \title{Simulate random variables from the Extended Empirical Saddlepoint density (ESS)}
 \usage{
-rsaddle(n, X, decay, multicore = !is.null(cluster), cluster = NULL,
-  ncores = detectCores() - 1, ...)
+rsaddle(n, X, decay, ml = 2, multicore = !is.null(cluster),
+  cluster = NULL, ncores = detectCores() - 1, ...)
 }
 \arguments{
 \item{n}{number of simulated vectors.}
@@ -14,6 +14,9 @@ rsaddle(n, X, decay, multicore = !is.null(cluster), cluster = NULL,
 
 \item{decay}{rate at which the ESS falls back on a normal density. Should be a positive number. See Fasiolo et al. (2016)
 for details.}
+
+\item{ml}{n random variables are generated from an importance density with covariance matrix 
+\code{ml*cov(X)}. By default the inflation factor is \code{ml=2}.}
 
 \item{multicore}{if TRUE the ESS densities corresponding the samples will be evaluated in parallel.}
 
@@ -45,11 +48,10 @@ Z <- rsaddle(1000, X, decay = 0.5)
 # Look at first marginal distribution
 hist( Z[ , 1] )
 }
-\author{
-Matteo Fasiolo <matteo.fasiolo@gmail.com>.
-}
 \references{
 Fasiolo, M., Wood, S. N., Hartig, F. and Bravington, M. V. (2016). 
             An Extended Empirical Saddlepoint Approximation for Intractable Likelihoods. ArXiv http://arxiv.org/abs/1601.01849.
 }
-
+\author{
+Matteo Fasiolo <matteo.fasiolo@gmail.com>.
+}

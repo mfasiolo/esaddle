@@ -37,4 +37,3 @@ demvn(rnorm(2), X, log = TRUE)      # Evaluate the fitted log-density at a rando
 \author{
 Matteo Fasiolo <matteo.fasiolo@gmail.com> and Simon N. Wood.
 }
-

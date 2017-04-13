@@ -46,11 +46,10 @@ p <- 5;n <- 100
 Y <- matrix(runif(p*n),p,n)
 robCov(Y)
 }
-\author{
-Simon N. Wood, maintained by Matteo Fasiolo <matteo.fasiolo@gmail.com>.
-}
 \references{
 Krzanowski, W.J. (1988) Principles of Multivariate Analysis. Oxford.
             Campbell, N.A. (1980) Robust procedures in multivariate analysis I: robust covariance estimation. JRSSC 29, 231-237.
 }
-
+\author{
+Simon N. Wood, maintained by Matteo Fasiolo <matteo.fasiolo@gmail.com>.
+}

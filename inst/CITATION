@@ -10,6 +10,6 @@ citEntry(
 	 year=2016,
 	 textVersion=paste(
 			   "Matteo Fasiolo, Simon N. Wood.",
-			   "An introduction to esaddle (2014). R package version 0.0.2."
+			   "An introduction to esaddle (2016). R package version 0.0.2."
 			  )	   
 	 )		 

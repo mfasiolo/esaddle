@@ -84,11 +84,10 @@ suppressWarnings( rug(x) )
 legend("topright", c("EES un-norm", "EES normalized", "Truth", "Gaussian"), 
         col = c(1, 4, 3, 2), lty = 1)
 }
-\author{
-Matteo Fasiolo <matteo.fasiolo@gmail.com> and Simon N. Wood.
-}
 \references{
 Fasiolo, M., Wood, S. N., Hartig, F. and Bravington, M. V. (2016). 
             An Extended Empirical Saddlepoint Approximation for Intractable Likelihoods. ArXiv http://arxiv.org/abs/1601.01849.
 }
-
+\author{
+Matteo Fasiolo <matteo.fasiolo@gmail.com> and Simon N. Wood.
+}

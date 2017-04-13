@@ -55,11 +55,10 @@ legend("topright", c("EES", "Truth"), col = c(1, 3), lty = 1)
 res <- findMode(x, init = mean(x), decay = decay)$mode
 abline(v = res, lty = 2, lwd = 1.5)
 }
-\author{
-Matteo Fasiolo <matteo.fasiolo@gmail.com>.
-}
 \references{
 Fasiolo, M., Wood, S. N., Hartig, F. and Bravington, M. V. (2016). 
             An Extended Empirical Saddlepoint Approximation for Intractable Likelihoods. ArXiv http://arxiv.org/abs/1601.01849.
 }
-
+\author{
+Matteo Fasiolo <matteo.fasiolo@gmail.com>.
+}
