@@ -7,6 +7,8 @@
 #' @param X an m by d matrix containing the data.
 #' @param decay rate at which the ESS falls back on a normal density. Should be a positive number. See Fasiolo et al. (2016)
 #'              for details.
+#' @param ml n random variables are generated from an importance density with covariance matrix 
+#'             \code{ml*cov(X)}. By default the inflation factor is \code{ml=2}.
 #' @param multicore  if TRUE the ESS densities corresponding the samples will be evaluated in parallel.
 #' @param ncores   number of cores to be used.
 #' @param cluster an object of class \code{c("SOCKcluster", "cluster")}. This allowes the user to pass her own cluster,
@@ -31,13 +33,13 @@
 #'
 
 
-rsaddle <- function(n, X, decay,
+rsaddle <- function(n, X, decay, ml = 2,
                     multicore = !is.null(cluster), cluster = NULL, ncores = detectCores() - 1,  ...)
 {
-  prop <- rmvn(n, colMeans(X), 1.5 * cov(X))
+  prop <- rmvn(n, colMeans(X), ml*cov(X))
   
   w <- dsaddle(prop, X = X, decay = decay, multicore = multicore, ncores = ncores, cluster = cluster, ...)$llk / 
-       dmvn(prop, colMeans(X), cov(X))
+       dmvn(prop, colMeans(X), ml*cov(X))
     
   out <- prop[ sample(1:n, n, replace = TRUE, prob = w), ]
   

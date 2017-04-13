@@ -27,6 +27,8 @@
 #'                             The default is 1e-6.}
 #'         \item{ \code{nNorm} }{ Number of simulations to be used in order to estimate the normalizing constant of the saddlepoint density.
 #'                                By default equal to 1e3.}
+#'         \item{ \code{ml} } { if \code{method=="IS"} \code{nNorm}, random variables are generated from an importance density with covariance matrix 
+#'                              \code{ml*cov(X)}. By default the inflation factor is \code{ml=2}.}
 #'         }
 #' @param ... extra arguments to be passed to \code{simulator}. 
 #' @return A list with entries:
@@ -57,7 +59,6 @@
 #' 
 #' @export
 #'
-
 selectDecay <- function(decay, 
                         simulator,
                         K,
@@ -74,7 +75,8 @@ selectDecay <- function(decay,
   # Control list which will be used internally
   ctrl <- list( "fastInit" = FALSE,
                 "method" = "IS", 
-                "nNorm" = 1000 )
+                "nNorm" = 1000, 
+                "ml" = 2)
       
   # Checking if the control list contains unknown names, entries in "control" substitute those in "ctrl"
   ctrl <- .ctrlSetup(innerCtrl = ctrl, outerCtrl = control)
@@ -175,7 +177,7 @@ selectDecay <- function(decay,
   rownames(negLogLik) <- decay
   colnames(negLogLik) <- 1:K
   
-  if( control$nNorm ) sam <- rmvn(control$nNorm, colMeans(X), cov(X))
+  if( control$nNorm ) sam <- rmvn(control$nNorm, colMeans(X), control$ml*cov(X))
     
   # For each value of "decay" and for each fold, calculate the negative log-likelihood 
   # of the sample points belonging to that fold.
@@ -187,7 +189,7 @@ selectDecay <- function(decay,
       
       normConst[ ii ] <- mean( dsaddle(y = sam, X = X, decay = decay[ii], log = FALSE, fastInit = control$fastInit,
                                        normalize = FALSE, control = control,
-                                       multicore = multicore, ncores = ncores, cluster = cluster)$llk / dmvn(sam, colMeans(X), cov(X)) )
+                                       multicore = multicore, ncores = ncores, cluster = cluster)$llk / dmvn(sam, colMeans(X), control$ml*cov(X)) )
       
     }
     
