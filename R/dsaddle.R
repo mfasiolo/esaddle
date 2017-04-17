@@ -22,6 +22,9 @@
 #'         \item{ \code{nNorm} }{if control$method == "IS", this is the number of importance samples used.}
 #'         \item{ \code{tol} }{the tolerance used to assess the convergence of the solution to the saddlepoint equation.
 #'                             The default is 1e-6.}
+#'         \item{ \code{ml} }{Relevant only if \code{control$method=="IS"}. n random variables are generated from 
+#'                            a Gaussian importance density with covariance matrix \code{ml*cov(X)}. 
+#'                            By default the inflation factor is \code{ml=2}.}
 #'         }
 #' @param multicore  if TRUE the empirical saddlepoint density at each row of y will be evaluated in parallel.
 #' @param ncores   number of cores to be used.
@@ -92,7 +95,8 @@ dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE,
   # Setting up control parameter
   ctrl <- list( "method" = "LAP", 
                 "nNorm" = 100 * ncol(X), 
-                "tol" = 1e-6, 
+                "tol" = 1e-6,
+                "ml" = 2,
                 "mst" = NULL)
   
   # Checking if the control list contains unknown names
@@ -190,12 +194,12 @@ dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE,
     # Log-normalizing constant by importance sampling
     if(ctrl$method == "IS") 
     {
-      aux <- rmvn(ctrl$nNorm, iCov$mY, 2*iCov$COV)
+      aux <- rmvn(ctrl$nNorm, iCov$mY, ctrl$ml*iCov$COV)
       
       logNorm <- log( .meanExpTrick( 
         dsaddle(y = aux, X = iX, decay = decay, deriv = FALSE, 
                  log = TRUE, normalize = FALSE, fastInit = fastInit, control = ctrl, 
-                 multicore = multicore, ncores = ncores, cluster = cluster)$llk - dmvn(aux, iCov$mY, 2*iCov$COV, log = TRUE) )
+                 multicore = multicore, ncores = ncores, cluster = cluster)$llk - dmvn(aux, iCov$mY, ctrl$ml*iCov$COV, log = TRUE) )
       )
       
     }

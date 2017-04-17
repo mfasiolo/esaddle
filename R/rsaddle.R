@@ -7,7 +7,7 @@
 #' @param X an m by d matrix containing the data.
 #' @param decay rate at which the ESS falls back on a normal density. Should be a positive number. See Fasiolo et al. (2016)
 #'              for details.
-#' @param ml n random variables are generated from an importance density with covariance matrix 
+#' @param ml n random variables are generated from a Gaussian importance density with covariance matrix 
 #'             \code{ml*cov(X)}. By default the inflation factor is \code{ml=2}.
 #' @param multicore  if TRUE the ESS densities corresponding the samples will be evaluated in parallel.
 #' @param ncores   number of cores to be used.

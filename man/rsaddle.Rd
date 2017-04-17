@@ -15,7 +15,7 @@ rsaddle(n, X, decay, ml = 2, multicore = !is.null(cluster),
 \item{decay}{rate at which the ESS falls back on a normal density. Should be a positive number. See Fasiolo et al. (2016)
 for details.}
 
-\item{ml}{n random variables are generated from an importance density with covariance matrix 
+\item{ml}{n random variables are generated from a Gaussian importance density with covariance matrix 
 \code{ml*cov(X)}. By default the inflation factor is \code{ml=2}.}
 
 \item{multicore}{if TRUE the ESS densities corresponding the samples will be evaluated in parallel.}

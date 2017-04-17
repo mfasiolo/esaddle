@@ -27,8 +27,8 @@
 #'                             The default is 1e-6.}
 #'         \item{ \code{nNorm} }{ Number of simulations to be used in order to estimate the normalizing constant of the saddlepoint density.
 #'                                By default equal to 1e3.}
-#'         \item{ \code{ml} } { if \code{method=="IS"} \code{nNorm}, random variables are generated from an importance density with covariance matrix 
-#'                              \code{ml*cov(X)}. By default the inflation factor is \code{ml=2}.}
+#'         \item{ \code{ml} } { if \code{method=="IS"} \code{nNorm}, random variables are generated from a Gaussian importance density 
+#'                              with covariance matrix \code{ml*cov(X)}. By default the inflation factor is \code{ml=2}.}
 #'         }
 #' @param ... extra arguments to be passed to \code{simulator}. 
 #' @return A list with entries:
