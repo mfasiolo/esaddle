@@ -1,5 +1,12 @@
-useDynLib(esaddle)
-exportPattern("^[[:alpha:]]+")
+useDynLib(esaddle, .registration = TRUE)
+
+export("demvn", 
+       "dsaddle", 
+       "ecgf", 
+       "findMode", 
+       "robCov", 
+       "rsaddle", 
+       "selectDecay")
 
 # Imported stuff
 importFrom(compiler, "cmpfun")

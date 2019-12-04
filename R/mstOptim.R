@@ -25,7 +25,7 @@
   if( is.null(mst)  )
   {
     # Calculate Minimum Spanning Tree across the lamHat points
-    mat <- .Call("mst", X_ = t(lamHat), PACKAGE = "esaddle");
+    mat <- .Call("mst", X_ = t(lamHat));
     mat[1:2, ] <- mat[1:2, ] + 1
         
     # Convert mst to a list, which is easier to traverse

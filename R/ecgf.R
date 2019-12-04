@@ -64,8 +64,7 @@ ecgf <- function(lambda, X, mix, grad = 0) {
                mix_ = mix, 
                grad_ = grad, 
                kum1_ = kum1, 
-               kum2_ = kum2,
-               PACKAGE = "esaddle")
+               kum2_ = kum2)
     
   return( ret )
   
