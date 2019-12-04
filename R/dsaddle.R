@@ -22,6 +22,8 @@
 #'         \item{ \code{nNorm} }{if control$method == "IS", this is the number of importance samples used.}
 #'         \item{ \code{tol} }{the tolerance used to assess the convergence of the solution to the saddlepoint equation.
 #'                             The default is 1e-6.}
+#'         \item{ \code{maxit} }{maximal number of iterations used to solve the saddlepoint equation.
+#'                               The default is 100;}
 #'         \item{ \code{ml} }{Relevant only if \code{control$method=="IS"}. n random variables are generated from 
 #'                            a Gaussian importance density with covariance matrix \code{ml*cov(X)}. 
 #'                            By default the inflation factor is \code{ml=2}.}
@@ -96,6 +98,7 @@ dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE,
   ctrl <- list( "method" = "LAP", 
                 "nNorm" = 100 * ncol(X), 
                 "tol" = 1e-6,
+                "maxit" = 100,
                 "ml" = 2,
                 "mst" = NULL)
   
@@ -143,7 +146,7 @@ dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE,
     # Objective function
     objFun <- function(.y, .lambda)
     {
-      return( .dsaddle(y = .y, X = X, tol = ctrl$tol, decay = decayI, 
+      return( .dsaddle(y = .y, X = X, tol = ctrl$tol, maxit = ctrl$maxit, decay = decayI, 
                         deriv = deriv, lambda = .lambda) )
     }
     
@@ -167,6 +170,7 @@ dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE,
                    # Args for .dsaddle()
                    X = X,
                    tol = ctrl$tol,
+                   maxit = ctrl$maxit,
                    decay = decayI,
                    deriv = deriv)}, warning = function(w) {
                      # There is a bug in plyr concerning a useless warning about "..."
@@ -207,7 +211,8 @@ dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE,
     # Log-normalizing constant by Laplace approximation
     if(ctrl$method == "LAP")
     {
-      tmp <- findMode(X = iX, init = iCov$mY, decay = decay, sadControl = list("tol" = ctrl$tol), hess = T)
+      tmp <- findMode(X = iX, init = iCov$mY, decay = decay, 
+                      sadControl = list("tol" = ctrl$tol, "maxit" = ctrl$maxit), hess = T)
       logNorm <- .laplApprox(tmp$logDens, tmp$hess, log = TRUE)
     }
     

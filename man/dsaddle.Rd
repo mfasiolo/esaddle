@@ -35,6 +35,8 @@ corresponding to each row of y. It can lead to faster computation if n >> d and 
 \item{ \code{nNorm} }{if control$method == "IS", this is the number of importance samples used.}
 \item{ \code{tol} }{the tolerance used to assess the convergence of the solution to the saddlepoint equation.
                     The default is 1e-6.}
+\item{ \code{maxit} }{maximal number of iterations used to solve the saddlepoint equation.
+                      The default is 100;}
 \item{ \code{ml} }{Relevant only if \code{control$method=="IS"}. n random variables are generated from 
                    a Gaussian importance density with covariance matrix \code{ml*cov(X)}. 
                    By default the inflation factor is \code{ml=2}.}
