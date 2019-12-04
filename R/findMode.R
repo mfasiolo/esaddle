@@ -42,7 +42,7 @@
 #'
 findMode <- function(X, decay, init = NULL, method = "BFGS", hess = FALSE, sadControl = list(), ...)
 {
-  switch(class(X),
+  switch(class(X)[1],
          "matrix"  = theData <- X,
          "numeric" = theData <- matrix(X, length(X), 1),
          stop("X should be either of class \"vector\" or a matrix")

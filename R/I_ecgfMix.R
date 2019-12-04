@@ -32,7 +32,7 @@
              
              if(deriv){
                normRes <- y
-               scaledRSS <- crossprod(y, normRes)
+               scaledRSS <- drop( crossprod(y, normRes) )
                sadVar <- exp(scaledRSS)
                normVar <- scaledRSS + 0.5 * scaledRSS^2 + 1
                d_sadVar <- 2 * sadVar * normRes
