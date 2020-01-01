@@ -9,7 +9,6 @@ Description: Tools for fitting the Extended Empirical Saddlepoint (EES) density.
 License: GPL (>=2)
 URL: https://github.com/mfasiolo/esaddle
 Imports:
-    Rcpp (>= 0.10.4),
     compiler,
     stats,
     graphics,
