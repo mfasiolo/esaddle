@@ -4,9 +4,18 @@
 \alias{dsaddle}
 \title{Evaluating the Extended Empirical Saddlepoint (EES) density}
 \usage{
-dsaddle(y, X, decay, deriv = FALSE, log = FALSE, normalize = FALSE,
-  fastInit = FALSE, control = list(), multicore = !is.null(cluster),
-  ncores = detectCores() - 1, cluster = NULL)
+dsaddle(
+  y,
+  X,
+  decay,
+  deriv = FALSE,
+  log = FALSE,
+  normalize = FALSE,
+  control = list(),
+  multicore = !is.null(cluster),
+  ncores = detectCores() - 1,
+  cluster = NULL
+)
 }
 \arguments{
 \item{y}{points at which the EES is evaluated (d dimensional vector) or an n by d matrix, each row indicating
@@ -24,9 +33,6 @@ Setting it to \code{Inf} leads to a Gaussian fit.}
 
 \item{normalize}{If TRUE the normalizing constant of the EES density will be computed. FALSE by 
 default.}
-
-\item{fastInit}{If TRUE a smart initialization is used to start the solution of the saddlepoint equation 
-corresponding to each row of y. It can lead to faster computation if n >> d and d < 5. FALSE by default.}
 
 \item{control}{A list of control parameters with entries:
 \itemize{

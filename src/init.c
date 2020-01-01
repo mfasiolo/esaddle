@@ -3,11 +3,8 @@
 
 SEXP ecgfCpp(SEXP lambda_, SEXP X_, SEXP mix_, SEXP grad_, SEXP kum1_, SEXP kum2_);
 
-SEXP mst(SEXP X_);
-
 static const R_CallMethodDef CallEntries[] = {
   {"ecgfCpp", (DL_FUNC) &ecgfCpp, 6},
-  {"mst", (DL_FUNC) &mst, 1},
   {NULL, NULL, 0}
 };
 

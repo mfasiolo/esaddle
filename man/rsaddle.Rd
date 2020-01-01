@@ -4,8 +4,16 @@
 \alias{rsaddle}
 \title{Simulate random variables from the Extended Empirical Saddlepoint density (ESS)}
 \usage{
-rsaddle(n, X, decay, ml = 2, multicore = !is.null(cluster),
-  cluster = NULL, ncores = detectCores() - 1, ...)
+rsaddle(
+  n,
+  X,
+  decay,
+  ml = 2,
+  multicore = !is.null(cluster),
+  cluster = NULL,
+  ncores = detectCores() - 1,
+  ...
+)
 }
 \arguments{
 \item{n}{number of simulated vectors.}

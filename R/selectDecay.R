@@ -73,8 +73,7 @@ selectDecay <- function(decay,
 {
   
   # Control list which will be used internally
-  ctrl <- list( "fastInit" = FALSE,
-                "method" = "IS", 
+  ctrl <- list( "method" = "IS", 
                 "nNorm" = 1000, 
                 "ml" = 2)
       
@@ -187,7 +186,7 @@ selectDecay <- function(decay,
     
     if( normalize ) {
       
-      normConst[ ii ] <- mean( dsaddle(y = sam, X = X, decay = decay[ii], log = FALSE, fastInit = control$fastInit,
+      normConst[ ii ] <- mean( dsaddle(y = sam, X = X, decay = decay[ii], log = FALSE,
                                        normalize = FALSE, control = control,
                                        multicore = multicore, ncores = ncores, cluster = cluster)$llk / dmvn(sam, colMeans(X), control$ml*cov(X)) )
       
@@ -198,7 +197,7 @@ selectDecay <- function(decay,
                              function(input){
                                index <- which(folds == input)
                                -sum( dsaddle(X[index, , drop = F], X = X[-index, , drop = F], normalize = FALSE,
-                                             decay = decay[ii], fastInit = control$fastInit, control = control, log = TRUE)$llk ) + 
+                                             decay = decay[ii], control = control, log = TRUE)$llk ) + 
                                              ifelse(normalize, length(index) * log(normConst[ ii ]), 0)
                              }, 
                              .progress = "text",

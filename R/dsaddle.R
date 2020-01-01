@@ -13,8 +13,6 @@
 #' @param log If TRUE the log of the saddlepoint density is returned.
 #' @param normalize If TRUE the normalizing constant of the EES density will be computed. FALSE by 
 #'                  default.
-#' @param fastInit If TRUE a smart initialization is used to start the solution of the saddlepoint equation 
-#'                 corresponding to each row of y. It can lead to faster computation if n >> d and d < 5. FALSE by default. 
 #' @param control A list of control parameters with entries:
 #'         \itemize{
 #'         \item{ \code{method} }{the method used to calculate the normalizing constant. 
@@ -71,8 +69,8 @@
 #' @export
 #'
 dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE, 
-                     normalize = FALSE, fastInit = FALSE, control = list(), 
-                     multicore = !is.null(cluster), ncores = detectCores() - 1, cluster = NULL) {
+                    normalize = FALSE, control = list(), 
+                    multicore = !is.null(cluster), ncores = detectCores() - 1, cluster = NULL) {
   ## X[i,j] is ith rep of jth variable; y is vector of variables.
   ## evaluate saddle point approximation based on empirical CGF
   if( !is.matrix(X) ) X <- matrix(X, length(X), 1)
@@ -87,8 +85,6 @@ dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE,
     }
   }
   
-  if( multicore && fastInit ) stop("You can't use multicore and fastInit together")
-  
   ny <- nrow( y )
   
   # Offsetting dimensionality, so decay stays pretty much at the same level for any d.
@@ -99,8 +95,7 @@ dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE,
                 "nNorm" = 100 * ncol(X), 
                 "tol" = 1e-6,
                 "maxit" = 100,
-                "ml" = 2,
-                "mst" = NULL)
+                "ml" = 2)
   
   # Checking if the control list contains unknown names
   # Entries in "control" substitute those in "ctrl"
@@ -140,48 +135,25 @@ dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE,
     #X <- X[ , -iCov$lowVar, drop = FALSE]
   }
   
-  if( fastInit && ny > 1 )
-  {
-    
-    # Objective function
-    objFun <- function(.y, .lambda)
-    {
-      return( .dsaddle(y = .y, X = X, tol = ctrl$tol, maxit = ctrl$maxit, decay = decayI, 
-                        deriv = deriv, lambda = .lambda) )
-    }
-    
-    # Gradient function
-    gradFun <- function(.y, .lambda, .extra)
-    {
-      return( .gradSaddle(y = .y, lambda = .lambda,  X = X, decay = decayI, onlyDlamDy = TRUE, extra = .extra) )
-    }
-    
-    # Approximate solution of saddlepoint equation, based on Gaussian CGF: lambda = Sigma^-1 (x - mu)
-    if( is.null(ctrl$mst) ) lamHat <- y else lamHat <- NULL
-    
-    # Evaluate density at multiple points using minimum spanning tree
-    out <- .mstOptim(y, lamHat, objFun, gradFun, mst = ctrl$mst)
-    
-  } else{
-    out <- list()
-    # Divide saddlepoint evaluations between cores
-    withCallingHandlers({
-      out <- alply(y, 1, .dsaddle, .parallel = multicore,
-                   # Args for .dsaddle()
-                   X = X,
-                   tol = ctrl$tol,
-                   maxit = ctrl$maxit,
-                   decay = decayI,
-                   deriv = deriv)}, warning = function(w) {
-                     # There is a bug in plyr concerning a useless warning about "..."
-                     if (length(grep("... may be used in an incorrect context", conditionMessage(w))))
-                       invokeRestart("muffleWarning")
-                   })
-    
-    # Close the cluster if it was opened inside this function
-    if(multicore && clusterCreated) stopCluster(cluster)
-    
-  }
+  out <- list()
+  # Divide saddlepoint evaluations between cores
+  withCallingHandlers({
+    out <- alply(y, 1, .dsaddle, .parallel = multicore,
+                 # Args for .dsaddle()
+                 X = X,
+                 tol = ctrl$tol,
+                 maxit = ctrl$maxit,
+                 decay = decayI,
+                 deriv = deriv)}, warning = function(w) {
+                   # There is a bug in plyr concerning a useless warning about "..."
+                   if (length(grep("... may be used in an incorrect context", conditionMessage(w))))
+                     invokeRestart("muffleWarning")
+                 })
+  
+  # Close the cluster if it was opened inside this function
+  if(multicore && clusterCreated) stopCluster(cluster)
+  
+  
   
   # Create output list
   out <- list( "llk" = sapply(out, "[[", "llk"),
@@ -202,8 +174,8 @@ dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE,
       
       logNorm <- log( .meanExpTrick( 
         dsaddle(y = aux, X = iX, decay = decay, deriv = FALSE, 
-                 log = TRUE, normalize = FALSE, fastInit = fastInit, control = ctrl, 
-                 multicore = multicore, ncores = ncores, cluster = cluster)$llk - dmvn(aux, iCov$mY, ctrl$ml*iCov$COV, log = TRUE) )
+                log = TRUE, normalize = FALSE, control = ctrl, 
+                multicore = multicore, ncores = ncores, cluster = cluster)$llk - dmvn(aux, iCov$mY, ctrl$ml*iCov$COV, log = TRUE) )
       )
       
     }
@@ -218,7 +190,7 @@ dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE,
     
     out$logNorm <- logNorm
     out$llk <- out$llk - logNorm
-            
+    
   }
   
   # Adjusting log-lik and its gradient to correct for normalization
@@ -239,8 +211,8 @@ dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE,
 ##########
 
 .dsaddle <- cmpfun(function(y, X, tol, decay, 
-                             deriv = FALSE, mixMethod = "mse", 
-                             maxit = 100, lambda = NULL) {
+                            deriv = FALSE, mixMethod = "mse", 
+                            maxit = 100, lambda = NULL) {
   ## X[i,j] is ith rep of jth variable; y is vector of variables.
   ## evaluate saddle point approximation based on empirical CGF
   
@@ -297,7 +269,7 @@ dsaddle <- function(y, X,  decay, deriv = FALSE, log = FALSE,
     rho <- 0.5
     ## Line search checking Arminjo condition and step halving
     while( ( b1$K - crossprod(lambda1, y) ) > 
-             ( b$K - crossprod(lambda, y) ) + c1 * alpha * crossprod(d.lambda, drop(b$dK-y)) && jj < 50)  
+           ( b$K - crossprod(lambda, y) ) + c1 * alpha * crossprod(d.lambda, drop(b$dK-y)) && jj < 50)  
     {
       jj <- jj + 1
       alpha <- alpha * rho

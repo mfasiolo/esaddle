@@ -4,9 +4,19 @@
 \alias{selectDecay}
 \title{Tuning the Extended Empirical Saddlepoint (EES) density by cross-validation}
 \usage{
-selectDecay(decay, simulator, K, nrep = 1, normalize = FALSE, draw = TRUE,
-  multicore = !is.null(cluster), cluster = NULL, ncores = detectCores() -
-  1, control = list(), ...)
+selectDecay(
+  decay,
+  simulator,
+  K,
+  nrep = 1,
+  normalize = FALSE,
+  draw = TRUE,
+  multicore = !is.null(cluster),
+  cluster = NULL,
+  ncores = detectCores() - 1,
+  control = list(),
+  ...
+)
 }
 \arguments{
 \item{decay}{Numeric vector containing the possible values of the tuning parameter.}

@@ -1,7 +1,6 @@
 #ifndef _ESADDLE_H
 #define _ESADDLE_H
 
-#include <RcppMLPACK.h>
 #include <RcppArmadillo.h>
 
 /*
@@ -17,7 +16,5 @@
  */
  
 RcppExport SEXP ecgfCpp(SEXP lambda_, SEXP X_, SEXP mix_, SEXP grad_, SEXP kum1_, SEXP kum2_);
-
-RcppExport SEXP mst(SEXP X_);
 
 #endif

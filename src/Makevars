@@ -1,5 +1,5 @@
 ## Use the R_HOME indirection to support installations of multiple R version
-PKG_LIBS = `$(R_HOME)/bin/Rscript -e "RcppMLPACK:::LdFlags()"` $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+PKG_LIBS = `$(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()"` $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 
 ## As an alternative, one can also add this code in a file 'configure'
 ##
@@ -24,7 +24,5 @@ PKG_LIBS = `$(R_HOME)/bin/Rscript -e "RcppMLPACK:::LdFlags()"` $(LAPACK_LIBS) $(
 ## done by a number of packages, but recommended only for more advanced users
 ## comfortable with autoconf and its related tools.
 
-
-#PKG_LIBS= `$(R_HOME)/bin/Rscript -e "RcppMLPACK:::LdFlags()"` $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 
 

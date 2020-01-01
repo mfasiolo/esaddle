@@ -4,8 +4,15 @@
 \alias{findMode}
 \title{Finding the mode of the empirical saddlepoint density}
 \usage{
-findMode(X, decay, init = NULL, method = "BFGS", hess = FALSE,
-  sadControl = list(), ...)
+findMode(
+  X,
+  decay,
+  init = NULL,
+  method = "BFGS",
+  hess = FALSE,
+  sadControl = list(),
+  ...
+)
 }
 \arguments{
 \item{X}{an n by d matrix containing the data.}
