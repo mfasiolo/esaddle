@@ -142,7 +142,7 @@ tmp <- selectDecay(decay = c(0.005, 0.01, 0.1, 0.25, 0.5, 1, 5, Inf),
 References
 ----------------------------
   
-  * Fasiolo, M., Wood, S. N., Hartig, F. and Bravington, M. V. (2016). An Extended Empirical Saddlepoint Approximation for Intractable Likelihoods. URL: ArXiv http://arxiv.org/abs/1601.01849.
+  * Fasiolo, M., Wood, S. N., Hartig, F. and Bravington, M. V. (2016). An Extended Empirical Saddlepoint Approximation for Intractable Likelihoods. URL: ArXiv https://arxiv.org/abs/1601.01849.
   
 
   
